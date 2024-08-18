@@ -1,17 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import BlockContainer from "./components/BlockContainer"
 import VideoUpload from "./components/VideoUpload";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import ItemSwitch from "./components/ItemSwitch";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import VideoContent from "./components/VideoContent";
 
 export default function Home() {
   const [file, setFile] = useState<File | undefined>();
   const [topic, setTopic] = useState("");
   const [script, setScript] = useState("");
+
+  const videoLink = useMemo(() => {
+    if (!file) return "";
+    return URL.createObjectURL(file);
+  }, [file])
 
   const avatars = [
     {
@@ -37,7 +44,7 @@ export default function Home() {
       </h1>
       <p className="mt-8 max-w-2xl mx-auto text-xl md:text-3xl text-center text-muted-foreground">Choose your product video as background, provide a topic and let our AI do the rest. </p>
       <div className="flex flex-col md:flex-row mt-10 md:mt-20 gap-4">
-        <div className="max-w-full w-[420px] min-h-60 flex-shrink-0 bg-mosaic"></div>
+        <VideoContent url={videoLink} />
         <div className="flex-1 overflow-hidden">
           <VideoUpload onChange={(file) => setFile(file)} />
           <BlockContainer className="mt-8">
