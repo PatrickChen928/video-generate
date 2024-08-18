@@ -61,14 +61,14 @@ export default function ItemSwitch({
       className
     )}>
       <h2 className="text-xl font-semibold w-28">{label}</h2>
-      <div className="flex-1 flex items-center px-1 border rounded-md">
+      <div className="flex-1 flex items-center px-1 border rounded-md overflow-hidden">
         <ChevronLeft className={cn(
-          "w-6 h-6 text-muted-foreground cursor-pointer",
+          "flex-shrink-0 w-6 h-6 text-muted-foreground cursor-pointer",
           disabled && "opacity-50 cursor-not-allowed"
         )} onClick={handleScrollLeft} />
         <Carousel
           setApi={setApi}
-          className="flex-1"
+          className="flex-1 overflow-hidden"
           opts={{
             loop: true,
             active: !disabled
@@ -77,7 +77,7 @@ export default function ItemSwitch({
           <CarouselContent>
             {options.map((opt) => (
               <CarouselItem key={opt.value}>
-                <div className="py-2 text-center">
+                <div className="py-2 text-center truncate">
                   {opt.label}
                 </div>
               </CarouselItem>
@@ -85,7 +85,7 @@ export default function ItemSwitch({
           </CarouselContent>
         </Carousel>
         <ChevronRight className={cn(
-          "w-6 h-6 text-muted-foreground cursor-pointer",
+          "flex-shrink-0 w-6 h-6 text-muted-foreground cursor-pointer",
           disabled && "opacity-50 cursor-not-allowed"
         )} onClick={handleScrollRight} />
       </div>
