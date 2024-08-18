@@ -8,6 +8,7 @@ interface VideoContentProps {
   avatar: string;
   caption: string;
   music: string;
+  voice: string;
 }
 
 export default function VideoContent({
@@ -15,18 +16,22 @@ export default function VideoContent({
   avatar,
   caption,
   music,
+  voice
 }: VideoContentProps) {
 
   const audioRef = useRef<HTMLAudioElement>(null);
+  const voiceRef = useRef<HTMLAudioElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(true);
 
   const handlePlay = () => {
     if (playing) {
       audioRef.current?.pause();
+      voiceRef.current?.pause();
       videoRef.current?.pause();
     } else {
       audioRef.current?.play();
+      voiceRef.current?.play();
       videoRef.current?.play();
     }
     setPlaying(!playing)
@@ -48,7 +53,14 @@ export default function VideoContent({
             </AspectRatio>
             <audio
               ref={audioRef}
-              src={`/assets/music/${music}.mp3`}
+              src={`/assets/musics/${music}.mp3`}
+              loop
+              autoPlay
+              className="hidden"
+            ></audio>
+            <audio
+              ref={voiceRef}
+              src={`/assets/voices/${voice}.mp3`}
               loop
               autoPlay
               className="hidden"
