@@ -59,6 +59,7 @@ export default function Home() {
             <ItemSwitch disabled={!file} className="mt-4" label="Voice" options={avatars} />
             <ItemSwitch disabled={!file} className="mt-4" label="Captions" options={avatars} />
             <ItemSwitch disabled={!file} className="mt-4" label="Music" options={avatars} />
+            <Button className="w-full mt-4 bg-primary-500 hover:bg-primary-500/80" disabled={!file}>Generate video</Button>
           </BlockContainer>
         </div>
       </div>
