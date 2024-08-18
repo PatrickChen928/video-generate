@@ -1,35 +1,30 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import BlockContainer from "./components/BlockContainer"
 import VideoUpload from "./components/VideoUpload";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import ItemSwitch from "./components/ItemSwitch";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import VideoContent from "./components/VideoContent";
+import assets from "@/lib/video-assets.json"
 
 export default function Home() {
+  const { avatars = [], captions = [], music = [] } = assets;
+
   const [file, setFile] = useState<File | undefined>();
   const [topic, setTopic] = useState("");
   const [script, setScript] = useState("");
+  const [avatarValue, setAvatarValue] = useState(avatars[0]);
+  const [captionValue, setCaptionValue] = useState(captions[0]);
+  const [musicValue, setMusicValue] = useState(music[0]);
+  const [voiceValue, setVoiceValue] = useState(music[0]);
 
   const videoLink = useMemo(() => {
     if (!file) return "";
     return URL.createObjectURL(file);
   }, [file])
-
-  const avatars = [
-    {
-      label: "female",
-      value: "female"
-    },
-    {
-      label: "male",
-      value: "male"
-    }
-  ]
 
   const generateScript = () => {
     setScript("This is a generated script: " + topic);
@@ -44,7 +39,12 @@ export default function Home() {
       </h1>
       <p className="mt-8 max-w-2xl mx-auto text-xl md:text-3xl text-center text-muted-foreground">Choose your product video as background, provide a topic and let our AI do the rest. </p>
       <div className="flex flex-col md:flex-row mt-10 md:mt-20 gap-4">
-        <VideoContent url={videoLink} />
+        <VideoContent
+          url={videoLink}
+          avatar={avatarValue}
+          caption={captionValue}
+          music={musicValue}
+        />
         <div className="flex-1 overflow-hidden">
           <VideoUpload onChange={(file) => setFile(file)} />
           <BlockContainer className="mt-8">
@@ -62,10 +62,33 @@ export default function Home() {
             />
           </BlockContainer>
           <BlockContainer className="mt-8">
-            <ItemSwitch disabled={!file} label="Avatar" options={avatars} />
-            <ItemSwitch disabled={!file} className="mt-4" label="Voice" options={avatars} />
-            <ItemSwitch disabled={!file} className="mt-4" label="Captions" options={avatars} />
-            <ItemSwitch disabled={!file} className="mt-4" label="Music" options={avatars} />
+            <ItemSwitch
+              disabled={!file}
+              label="Avatar"
+              options={avatars.map((name) => ({ value: name, label: name }))}
+              onChange={(value) => setAvatarValue(value)}
+            />
+            <ItemSwitch
+              disabled={!file}
+              className="mt-4"
+              label="Voice"
+              options={music.map((name) => ({ value: name, label: name }))}
+              onChange={(value) => setVoiceValue(value)}
+            />
+            <ItemSwitch
+              disabled={!file}
+              className="mt-4"
+              label="Captions"
+              options={captions.map((name) => ({ value: name, label: name + ' style' }))}
+              onChange={(value) => setCaptionValue(value)}
+            />
+            <ItemSwitch
+              disabled={!file}
+              className="mt-4"
+              label="Music"
+              options={music.map((name) => ({ value: name, label: name }))}
+              onChange={(value) => setMusicValue(value)}
+            />
             <Button className="w-full mt-4 bg-primary-500 hover:bg-primary-500/80" disabled={!file}>Generate video</Button>
           </BlockContainer>
         </div>
