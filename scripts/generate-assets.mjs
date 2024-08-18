@@ -2,7 +2,7 @@ import fg from 'fast-glob';
 import fs from 'fs';
 import path from 'path';
 
-const SOURCE_FOLDER_PATH = "/public/assets/{avatars,captions,music}/*.*";
+const SOURCE_FOLDER_PATH = "/public/assets/{avatars,captions,musics,voices}/*.*";
 const TARGET_FOLDER_PATH = "/lib";
 
 export async function generateAssets() {
@@ -11,7 +11,8 @@ export async function generateAssets() {
     const result = {
       avatars: [],
       captions: [],
-      music: []
+      musics: [],
+      voices: []
     }
     assets.forEach(asset => {
       const type = asset.split('/').slice(-2, -1)[0];

@@ -1,25 +1,30 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import BlockContainer from "./components/BlockContainer"
-import VideoUpload from "./components/VideoUpload";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import BlockContainer from "./components/BlockContainer"
+import VideoUpload from "./components/VideoUpload";
 import ItemSwitch from "./components/ItemSwitch";
 import VideoContent from "./components/VideoContent";
 import assets from "@/lib/video-assets.json"
+import { insertVideo } from "@/lib/supabase/video";
+import { LoaderCircle } from "lucide-react";
 
 export default function Home() {
-  const { avatars = [], captions = [], music = [] } = assets;
+  const { avatars = [], captions = [], musics = [], voices = [] } = assets;
 
   const [file, setFile] = useState<File | undefined>();
   const [topic, setTopic] = useState("");
   const [script, setScript] = useState("");
   const [avatarValue, setAvatarValue] = useState(avatars[0]);
   const [captionValue, setCaptionValue] = useState(captions[0]);
-  const [musicValue, setMusicValue] = useState(music[0]);
-  const [voiceValue, setVoiceValue] = useState(music[0]);
+  const [musicValue, setMusicValue] = useState(musics[0]);
+  const [voiceValue, setVoiceValue] = useState(voices[0]);
+
+  const [transition, startTransition] = useTransition()
 
   const videoLink = useMemo(() => {
     if (!file) return "";
@@ -28,6 +33,21 @@ export default function Home() {
 
   const generateScript = () => {
     setScript("This is a generated script: " + topic);
+  }
+
+  const generateVideo = () => {
+    startTransition(() => insertVideo({
+      topic,
+      script,
+      avatar: avatarValue,
+      voice: voiceValue,
+      captions: captionValue,
+      music: musicValue
+    }).then(() => {
+      toast.success("Video generated successfully!")
+    }).catch(() => {
+      toast.error("Uh oh! Something went wrong.")
+    }))
   }
 
   return (
@@ -44,6 +64,7 @@ export default function Home() {
           avatar={avatarValue}
           caption={captionValue}
           music={musicValue}
+          voice={voiceValue}
         />
         <div className="flex-1 overflow-hidden">
           <VideoUpload onChange={(file) => setFile(file)} />
@@ -72,7 +93,7 @@ export default function Home() {
               disabled={!file}
               className="mt-4"
               label="Voice"
-              options={music.map((name) => ({ value: name, label: name }))}
+              options={voices.map((name) => ({ value: name, label: name }))}
               onChange={(value) => setVoiceValue(value)}
             />
             <ItemSwitch
@@ -86,10 +107,17 @@ export default function Home() {
               disabled={!file}
               className="mt-4"
               label="Music"
-              options={music.map((name) => ({ value: name, label: name }))}
+              options={musics.map((name) => ({ value: name, label: name }))}
               onChange={(value) => setMusicValue(value)}
             />
-            <Button className="w-full mt-4 bg-primary-500 hover:bg-primary-500/80" disabled={!file}>Generate video</Button>
+            <Button
+              className="flex gap-2 items-center w-full mt-4 bg-primary-500 hover:bg-primary-500/80"
+              disabled={!file || transition}
+              onClick={generateVideo}
+            >
+              {transition && <LoaderCircle className="animate-spin" size={24} />}
+              Generate video
+            </Button>
           </BlockContainer>
         </div>
       </div>
