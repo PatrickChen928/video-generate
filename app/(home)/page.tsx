@@ -107,7 +107,7 @@ export default function Home() {
               disabled={!file}
               className="mt-4"
               label="Music"
-              options={musics.map((name) => ({ value: name, label: name }))}
+              options={[{ value: '', label: 'None' }, ...musics.map((name) => ({ value: name, label: name }))]}
               onChange={(value) => setMusicValue(value)}
             />
             <Button

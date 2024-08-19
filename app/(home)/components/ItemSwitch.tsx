@@ -71,7 +71,8 @@ export default function ItemSwitch({
           className="flex-1 overflow-hidden"
           opts={{
             loop: true,
-            active: !disabled
+            active: !disabled,
+            duration: 10
           }}
         >
           <CarouselContent>
