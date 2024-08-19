@@ -57,7 +57,7 @@ export default function Home() {
         <br />
         Get one for <b className="text-primary-500 font-semibold">$1</b>.
       </h1>
-      <p className="mt-8 max-w-2xl mx-auto text-xl md:text-3xl text-center text-muted-foreground">Choose your product video as background, provide a topic and let our AI do the rest. </p>
+      <p className="mt-8 max-w-2xl mx-auto md:text-3xl text-center text-muted-foreground">Choose your product video as background, provide a topic and let our AI do the rest. </p>
       <div className="flex flex-col md:flex-row mt-10 md:mt-20 gap-4">
         <VideoContent
           url={videoLink}
