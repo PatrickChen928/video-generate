@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Play } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
@@ -24,6 +24,16 @@ export default function VideoContent({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(true);
 
+  useEffect(() => {
+    if (url && !playing) {
+      audioRef.current?.play();
+      voiceRef.current?.play();
+      videoRef.current?.play();
+      setPlaying(true)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url])
+
   const handlePlay = () => {
     if (playing) {
       audioRef.current?.pause();
@@ -38,7 +48,7 @@ export default function VideoContent({
   }
 
   return (
-    <div className="relative flex items-center justify-center max-w-full w-[420px] min-h-60 flex-shrink-0 bg-mosaic rounded-md overflow-hidden cursor-pointer" onClick={handlePlay}>
+    <div className="relative flex items-center justify-center max-w-full w-[480px] min-h-60 flex-shrink-0 bg-mosaic rounded-md overflow-hidden cursor-pointer" onClick={handlePlay}>
       {
         !!url && (
           <>
@@ -55,14 +65,14 @@ export default function VideoContent({
               ref={audioRef}
               src={`/assets/musics/${music}.mp3`}
               loop
-              autoPlay
+              autoPlay={playing}
               className="hidden"
             ></audio>
             <audio
               ref={voiceRef}
               src={`/assets/voices/${voice}.mp3`}
               loop
-              autoPlay
+              autoPlay={playing}
               className="hidden"
             ></audio>
             <Image
