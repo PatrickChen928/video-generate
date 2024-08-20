@@ -16,7 +16,6 @@ export default function VideoContent({
   avatar,
   caption,
   music,
-  voice
 }: VideoContentProps) {
 
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -64,13 +63,6 @@ export default function VideoContent({
             <audio
               ref={audioRef}
               src={`/assets/musics/${music}.mp3`}
-              loop
-              autoPlay={playing}
-              className="hidden"
-            ></audio>
-            <audio
-              ref={voiceRef}
-              src={`/assets/voices/${voice}.mp3`}
               loop
               autoPlay={playing}
               className="hidden"
