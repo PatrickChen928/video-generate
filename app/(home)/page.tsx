@@ -21,7 +21,7 @@ export default function Home() {
   const [script, setScript] = useState("");
   const [avatarValue, setAvatarValue] = useState(avatars[0]);
   const [captionValue, setCaptionValue] = useState(captions[0]);
-  const [musicValue, setMusicValue] = useState(musics[0]);
+  const [musicValue, setMusicValue] = useState('');
   const [voiceValue, setVoiceValue] = useState(voices[0]);
 
   const [transition, startTransition] = useTransition()
